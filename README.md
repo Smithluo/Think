@@ -51,3 +51,30 @@ $sql = "SELECT concat(IFNULL(c.region_name, ''), '  ', IFNULL(p.region_name, '')
                 "LEFT JOIN " . $ecs->table('region') . " AS d ON o.district = d.region_id " .
             "WHERE o.order_id = '$order[order_id]'";
     $order['region'] = $db->getOne($sql);
+
+
+	/**
+	 * 
+     * 选择一个随机的方案 生成订单的唯一编码
+     * 判重，如果orderSn 重复，递归
+     * @return string
+     */
+    public static function getUniqueOrderSn($date = null)
+    {
+        mt_srand((double) microtime() * 1000000);
+
+        if (empty($date)) {
+            $date = date('Ymd');
+        }
+
+        $orderSn = $date . str_pad(mt_rand(1, 99999), 5, '0', STR_PAD_LEFT);
+
+        //  判重
+        $record = OrderInfo::find()->where(['order_sn' => $orderSn])->one();
+        if (!empty($record)) {
+            return self::getUniqueOrderSn($date);
+        } else {
+            return $orderSn;
+        }
+    }
+
