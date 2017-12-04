@@ -78,3 +78,6 @@ $sql = "SELECT concat(IFNULL(c.region_name, ''), '  ', IFNULL(p.region_name, '')
         }
     }
 
+	好的 sql 语句
+    SELECT c2,c3 FROM t WHERE date(c1) = ‘2016-10-15’
+	=> SELECT c2,c3 FROM t WHERE c1 >= ‘2016-10-15’ AND c1 < ‘2016-10-16’
